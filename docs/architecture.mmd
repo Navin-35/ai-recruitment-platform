@@ -1,0 +1,39 @@
+flowchart TB
+    U[Recruiter] --> FE[React + TypeScript Frontend]
+    FE --> AUTH[Supabase Auth]
+    FE --> API[FastAPI Backend]
+    FE --> ST[Supabase Storage]
+
+    API --> WF[LangGraph Orchestrator]
+    WF --> DOC[Document Processing]
+    DOC --> PDF[PDF Parser]
+    DOC --> DOCX[DOCX Parser]
+    DOC --> OCR[OCR / Visual Fallback]
+    WF --> LLM[LLM Structured Extraction]
+    WF --> EMB[Embedding Service]
+
+    EMB --> RET[Hybrid RAG]
+    RET --> V[(Supabase Postgres + pgvector)]
+    RET --> FTS[(Postgres FTS)]
+    RET --> RRF[Reciprocal Rank Fusion]
+    RRF --> RR[Cross-Encoder Reranker]
+
+    RR --> EVD[Evidence Set]
+    EVD --> MATCH[Requirement-Level Matching]
+    MATCH --> SCORE[Deterministic Scoring]
+    SCORE --> GAP[Skill Gap Analysis]
+    GAP --> EX[Grounded Explanation]
+    EX --> DB[(Supabase Postgres)]
+    SCORE --> DB
+
+    API --> Q[Redis Queue]
+    Q --> W[Async Worker]
+    W --> WF
+
+    API --> OBS[Langfuse Observability]
+    WF --> OBS
+    RET --> OBS
+
+    DB --> FE
+
+    classDef data fill:#eef6ff,stroke:#4c78a8;
