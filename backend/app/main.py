@@ -1,6 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api import (
+    candidates_router,
+    jobs_router,
+    resumes_router,
+)
+
 from app.core.init_db import init_database
 
 
@@ -24,6 +30,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+app.include_router(jobs_router)
+app.include_router(candidates_router)
+app.include_router(resumes_router)
 
 
 @app.on_event("startup")
