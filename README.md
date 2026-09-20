@@ -13,7 +13,10 @@
 
 ## 📖 Complete Technical Architecture Specification
 
-> **For the comprehensive 1,700+ line technical architecture specification, database schemas, API specs, evaluation matrices, and implementation blueprint, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).**
+> **Documentation Quick Links:**
+> - 📘 **[Complete Technical Architecture Specification (docs/ARCHITECTURE.md)](docs/ARCHITECTURE.md)** *(1,780+ lines of database models, API specs, evaluation matrices, and implementation blueprints)*
+> - 📊 **[Interactive System Workflows & Visual Diagrams (docs/WORKFLOW_AND_DIAGRAMS.md)](docs/WORKFLOW_AND_DIAGRAMS.md)** *(Rendered Mermaid charts for Pipelines A, B, C, LangGraph state machine, ERD, and the 9-phase roadmap)*
+> - 📐 **[Master Mermaid Source File (docs/project_workflow_and_phases.mmd)](docs/project_workflow_and_phases.mmd)** *(Raw standalone Mermaid topology)*
 
 ---
 
@@ -155,8 +158,10 @@ Transforms unstructured candidate resumes into structured, queryable profiles:
 ```text
 ai-recruitment-platform/
 ├── docs/
-│   ├── ARCHITECTURE.md          # Complete 1,700+ line technical architecture specification
-│   └── architecture.mmd         # Standalone Mermaid diagram
+│   ├── ARCHITECTURE.md                  # Complete 1,780+ line technical architecture specification
+│   ├── WORKFLOW_AND_DIAGRAMS.md         # Visual Mermaid workflows, state machine, ERD, and roadmap
+│   ├── project_workflow_and_phases.mmd  # Master standalone Mermaid architecture and phases file
+│   └── architecture.mmd                 # Basic standalone Mermaid diagram
 ├── backend/
 │   ├── app/
 │   │   ├── api/                 # REST API endpoints (jobs, candidates, resumes, matches)

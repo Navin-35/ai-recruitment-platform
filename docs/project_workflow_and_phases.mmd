@@ -1,0 +1,145 @@
+flowchart TB
+%% =========================================================================
+%% AI RECRUITMENT & CANDIDATE INTELLIGENCE PLATFORM
+%% Comprehensive System Architecture, Pipelines, and Phased Roadmap
+%% =========================================================================
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 1: USER INTERACTION & INGESTION LAYER
+    %% ---------------------------------------------------------------------
+    subgraph UI_LAYER ["1. User Interaction & Access Layer"]
+        RECRUITER["Recruiter / Hiring Manager"]
+        WEB_APP["React + Vite + TypeScript Frontend\n(Job Workspace & Candidate Leaderboard)"]
+        AUTH_SVC["Supabase Auth Service\n(JWT Tokens, RBAC, Multi-Tenant RLS)"]
+        
+        RECRUITER -->|"Interacts via UI"| WEB_APP
+        WEB_APP -->|"Authenticates"| AUTH_SVC
+    end
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 2: API GATEWAY & WORKFLOW ORCHESTRATION
+    %% ---------------------------------------------------------------------
+    subgraph BACKEND_LAYER ["2. API Gateway & Orchestration Core"]
+        FASTAPI["FastAPI REST Backend\n(/api/v1/jobs, /candidates, /matches)"]
+        LANGGRAPH["LangGraph Workflow Orchestrator\n(Deterministic Multi-Step State Machine)"]
+        REDIS_Q["Redis Task Queue\n(Celery / Arq Async Worker)"]
+        
+        WEB_APP -->|"REST API Calls + JWT"| FASTAPI
+        FASTAPI -->|"Dispatches Sync Tasks"| LANGGRAPH
+        FASTAPI -->|"Enqueues Batch Jobs"| REDIS_Q
+        REDIS_Q -->|"Pulls Background Jobs"| LANGGRAPH
+    end
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 3: DOCUMENT INTELLIGENCE & EXTRACTION
+    %% ---------------------------------------------------------------------
+    subgraph DOC_INTELLIGENCE ["3. Document Processing & Structured Extraction"]
+        DOC_STORAGE["Supabase Storage\n(Encrypted Private S3 Buckets)"]
+        PARSER["Document Parsing Engine\n(PyMuPDF / pdfplumber / python-docx)"]
+        OCR_FALLBACK["OCR Fallback Engine\n(Tesseract / Visual Extraction)"]
+        GEMINI_EXTRACT["Gemini 1.5/2.0 Flash Extraction\n(Pydantic Structured JSON Schema)"]
+        SKILL_ONTOLOGY["Skill Graph & Ontology\n(Canonical Normalization & Aliases)"]
+
+        FASTAPI -->|"Stores Raw PDF/DOCX"| DOC_STORAGE
+        LANGGRAPH -->|"Fetches Document"| DOC_STORAGE
+        DOC_STORAGE -->|"Raw Stream"| PARSER
+        PARSER -->|"Scanned / Image Fallback"| OCR_FALLBACK
+        PARSER -->|"Clean Raw Text"| GEMINI_EXTRACT
+        OCR_FALLBACK -->|"Recovered Text"| GEMINI_EXTRACT
+        GEMINI_EXTRACT -->|"Extracted Skills"| SKILL_ONTOLOGY
+    end
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 4: HYBRID RETRIEVAL & VECTOR ENGINE
+    %% ---------------------------------------------------------------------
+    subgraph RETRIEVAL_LAYER ["4. Hybrid Retrieval & Vector Database (Supabase)"]
+        CHUNKER["Section-Aware Chunker\n(Experience, Projects, Education, Skills)"]
+        EMBED_SVC["Gemini Embeddings Service\n(text-embedding-004 / 768-dim)"]
+        PG_VECTOR[("PostgreSQL + pgvector\n(HNSW Cosine Vector Index)")]
+        PG_FTS[("PostgreSQL FTS\n(tsvector Lexical / Keyword Index)")]
+        RRF_FUSION["Reciprocal Rank Fusion (RRF)\n(Combines Vector & Lexical Ranks)"]
+        RERANKER["Cross-Encoder Reranker\n(Deep Precision Context Filtering)"]
+
+        GEMINI_EXTRACT -->|"Candidate Sections"| CHUNKER
+        CHUNKER -->|"Text Chunks"| EMBED_SVC
+        EMBED_SVC -->|"Dense Vectors"| PG_VECTOR
+        CHUNKER -->|"Exact Keywords & Terms"| PG_FTS
+
+        PG_VECTOR -->|"Top-K Semantic Matches"| RRF_FUSION
+        PG_FTS -->|"Top-K Keyword Matches"| RRF_FUSION
+        RRF_FUSION -->|"Fused Candidates"| RERANKER
+    end
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 5: MATCHING, SCORING & EXPLANATION ENGINE
+    %% ---------------------------------------------------------------------
+    subgraph MATCH_ENGINE ["5. Deterministic Matching & Grounded Explanations"]
+        DECOMPOSE["JD Requirement Decomposition\n(Atomic Criteria: Skills, Exp, Education)"]
+        EVIDENCE_STORE["Auditable Evidence Collector\n(Page Numbers, Bullet Points, Snippets)"]
+        SCORE_ENGINE["Deterministic Scoring Engine\n(40% Skills + 25% Exp + 20% Proj + 10% Edu + 5% Add)"]
+        SKILL_GAP["Skill-Gap Analyzer\n(Missing vs Met Qualifications Matrix)"]
+        EXPLAINER["Grounded LLM Explainer (Gemini)\n(Strictly Generates Explanations with Citations)"]
+        
+        LANGGRAPH -->|"Inputs JD Requirements"| DECOMPOSE
+        DECOMPOSE -->|"Executes Per-Requirement Search"| PG_VECTOR
+        DECOMPOSE -->|"Executes Per-Requirement Search"| PG_FTS
+        RERANKER -->|"Verified Snippets"| EVIDENCE_STORE
+        EVIDENCE_STORE -->|"Evidence Metrics"| SCORE_ENGINE
+        SCORE_ENGINE -->|"Evaluates Deficits"| SKILL_GAP
+        SCORE_ENGINE -->|"Mathematical Scores"| EXPLAINER
+        EVIDENCE_STORE -->|"Verified Snippets"| EXPLAINER
+        SKILL_GAP -->|"Gaps Data"| EXPLAINER
+    end
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 6: PERSISTENCE, OBSERVABILITY & CLIENT VIEW
+    %% ---------------------------------------------------------------------
+    subgraph OUTPUT_OBSERVABILITY ["6. Output Persistence & Observability"]
+        PG_RELATIONAL[("PostgreSQL Relational DB\n(Jobs, Candidates, MatchRuns, Scores)")]
+        LANGFUSE["Langfuse Observability & Tracing\n(Latency, Token Costs, Recall@K, Evals)"]
+        LEADERBOARD["Recruiter Dashboard View\n(Rankings, Fit Breakdown & Evidence Drawer)"]
+
+        SCORE_ENGINE -->|"Persists Final Scores"| PG_RELATIONAL
+        EXPLAINER -->|"Persists Grounded Summary"| PG_RELATIONAL
+        LANGGRAPH -->|"Emits Traces & Spans"| LANGFUSE
+        FASTAPI -->|"Monitors API Latency"| LANGFUSE
+        PG_RELATIONAL -->|"Queries Match Results"| FASTAPI
+        FASTAPI -->|"Streams Results"| LEADERBOARD
+    end
+
+    %% ---------------------------------------------------------------------
+    %% SECTION 7: 9-PHASE IMPLEMENTATION ROADMAP
+    %% ---------------------------------------------------------------------
+    subgraph ROADMAP ["7. Phased Engineering Implementation Roadmap"]
+        direction LR
+        P1["Phase 1\nDatabase Foundation\n(SQLAlchemy/Postgres)"]
+        P2["Phase 2\nSupabase & Vector\n(pgvector + Storage + RLS)"]
+        P3["Phase 3\nDocument Engine\n(PyMuPDF + OCR Fallback)"]
+        P4["Phase 4\nStructured AI\n(Gemini + Skill Graph)"]
+        P5["Phase 5\nHybrid RAG\n(pgvector + FTS + RRF)"]
+        P6["Phase 6\nScoring Engine\n(Deterministic Formulas)"]
+        P7["Phase 7\nCitations & Explanations\n(Page-level Grounding)"]
+        P8["Phase 8\nOrchestration\n(LangGraph + Redis Queue)"]
+        P9["Phase 9\nObservability & Evals\n(Langfuse + Pytest CI/CD)"]
+
+        P1 ==> P2 ==> P3 ==> P4 ==> P5 ==> P6 ==> P7 ==> P8 ==> P9
+    end
+
+    %% ---------------------------------------------------------------------
+    %% STYLING & CLASSES
+    %% ---------------------------------------------------------------------
+    classDef ui fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1;
+    classDef backend fill:#ede7f6,stroke:#512da8,stroke-width:2px,color:#311b92;
+    classDef doc fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#bf360c;
+    classDef retrieval fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
+    classDef scoring fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#880e4f;
+    classDef storage fill:#efebe9,stroke:#4e342e,stroke-width:2px,color:#3e2723;
+    classDef roadmap fill:#fffde7,stroke:#fbc02d,stroke-width:2px,color:#f57f17;
+
+    class RECRUITER,WEB_APP,AUTH_SVC,LEADERBOARD ui;
+    class FASTAPI,LANGGRAPH,REDIS_Q backend;
+    class DOC_STORAGE,PARSER,OCR_FALLBACK,GEMINI_EXTRACT,SKILL_ONTOLOGY doc;
+    class CHUNKER,EMBED_SVC,PG_VECTOR,PG_FTS,RRF_FUSION,RERANKER retrieval;
+    class DECOMPOSE,EVIDENCE_STORE,SCORE_ENGINE,SKILL_GAP,EXPLAINER scoring;
+    class PG_RELATIONAL,LANGFUSE storage;
+    class P1,P2,P3,P4,P5,P6,P7,P8,P9 roadmap;
