@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 if TYPE_CHECKING:
+    from app.models.chunk import DocumentChunk
     from app.models.job_requirement import JobRequirement
     from app.models.match import CandidateMatch
 
@@ -67,6 +68,12 @@ class Job(Base):
 
     matches: Mapped[list["CandidateMatch"]] = relationship(
         "CandidateMatch",
+        back_populates="job",
+        cascade="all, delete-orphan",
+    )
+
+    chunks: Mapped[list["DocumentChunk"]] = relationship(
+        "DocumentChunk",
         back_populates="job",
         cascade="all, delete-orphan",
     )

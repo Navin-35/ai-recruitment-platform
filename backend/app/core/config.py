@@ -10,6 +10,21 @@ class Settings(BaseSettings):
 
     google_api_key: str = ""
 
+    # Supabase Configuration
+    supabase_url: str = ""
+    supabase_key: str = ""
+    supabase_service_role_key: str = ""
+    supabase_jwt_secret: str = ""
+
+    # Storage Buckets
+    storage_bucket_resumes: str = "resumes"
+    storage_bucket_jobs: str = "job-descriptions"
+    storage_bucket_exports: str = "exports"
+    storage_signed_url_expiry: int = 3600  # 1 hour
+
+    # Security & Auth Settings
+    enable_auth_enforcement: bool = False
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

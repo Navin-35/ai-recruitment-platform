@@ -4,6 +4,12 @@ from app.schemas.candidate import (
     CandidateResponse,
     CandidateUpdate,
 )
+from app.schemas.chunk import (
+    ChunkSearchQuery,
+    ChunkSearchResult,
+    DocumentChunkCreate,
+    DocumentChunkResponse,
+)
 from app.schemas.job import (
     JobCreate,
     JobDetailResponse,
@@ -44,4 +50,8 @@ __all__ = [
     "SkillCreate",
     "SkillUpdate",
     "SkillResponse",
+    "DocumentChunkCreate",
+    "DocumentChunkResponse",
+    "ChunkSearchQuery",
+    "ChunkSearchResult",
 ]

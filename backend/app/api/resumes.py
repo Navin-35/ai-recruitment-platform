@@ -7,30 +7,27 @@ from fastapi import (
     File,
     Form,
     HTTPException,
+    Query,
     Response,
     UploadFile,
     status,
 )
 from sqlalchemy.orm import Session
 
+from app.core.config import settings
 from app.core.database import get_db
 from app.models import Candidate, Resume
 from app.schemas import ResumeResponse
+from app.services.storage import storage_service
 
 router = APIRouter(
     prefix="/resumes",
     tags=["Resumes"],
 )
 
-UPLOAD_DIR = Path("data/resumes")
-UPLOAD_DIR.mkdir(
-    parents=True,
-    exist_ok=True,
-)
-
 ALLOWED_EXTENSIONS = {
-    ".pdf",
-    ".docx",
+    ".pdf": "application/pdf",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 }
 
 
@@ -77,13 +74,19 @@ async def upload_resume(
         )
 
     unique_filename = f"{uuid4().hex}{extension}"
-    file_path = UPLOAD_DIR / unique_filename
-    file_path.write_bytes(contents)
+    content_type = ALLOWED_EXTENSIONS.get(extension, "application/octet-stream")
+
+    stored_path = storage_service.upload_file(
+        bucket=settings.storage_bucket_resumes,
+        destination_path=unique_filename,
+        file_bytes=contents,
+        content_type=content_type,
+    )
 
     resume = Resume(
         candidate_id=candidate_id,
         filename=filename,
-        file_path=str(file_path),
+        file_path=stored_path,
         file_type=extension.replace(".", ""),
         processing_status="pending",
     )
@@ -110,6 +113,48 @@ def get_resume(
             detail="Resume not found.",
         )
     return resume
+
+
+@router.get(
+    "/{resume_id}/signed-url",
+)
+def get_resume_signed_url(
+    resume_id: int,
+    expires_in: int = Query(default=3600, ge=60, le=86400, description="Signed URL expiry in seconds"),
+    db: Session = Depends(get_db),
+):
+    """
+    Generates a secure, time-limited signed URL for authorized download/preview
+    of a candidate's resume from private Supabase Storage.
+    """
+    resume = db.query(Resume).filter(Resume.id == resume_id).first()
+    if resume is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resume not found.",
+        )
+
+    if not resume.file_path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No file stored for this resume.",
+        )
+
+    # Extract object key if stored as full path or filename
+    file_key = Path(resume.file_path).name
+
+    signed_url = storage_service.get_signed_url(
+        bucket=settings.storage_bucket_resumes,
+        file_path=file_key,
+        expires_in=expires_in,
+    )
+
+    return {
+        "resume_id": resume.id,
+        "filename": resume.filename,
+        "signed_url": signed_url,
+        "expires_in_seconds": expires_in,
+    }
 
 
 @router.get(
@@ -151,12 +196,11 @@ def delete_resume(
         )
 
     if resume.file_path:
-        local_path = Path(resume.file_path)
-        if local_path.exists():
-            try:
-                local_path.unlink()
-            except OSError:
-                pass
+        file_key = Path(resume.file_path).name
+        storage_service.delete_file(
+            bucket=settings.storage_bucket_resumes,
+            file_path=file_key,
+        )
 
     db.delete(resume)
     db.commit()

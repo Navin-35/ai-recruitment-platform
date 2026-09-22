@@ -31,9 +31,10 @@ Thumbs.db
 # Logs
 *.log
 
-# Uploaded resumes
-data/resumes/*
-data/jobs/*
+# Uploaded files and local data
+data/
+backend/data/
+**/data/storage/
 
 # Python cache
 .pytest_cache/
