@@ -1,4 +1,6 @@
-from sqlalchemy import Integer, String
+from datetime import datetime, timezone
+
+from sqlalchemy import DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.database import Base
@@ -23,4 +25,10 @@ class Skill(Base):
     category: Mapped[str | None] = mapped_column(
         String(100),
         nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
     )
