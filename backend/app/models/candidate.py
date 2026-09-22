@@ -1,9 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+
+if TYPE_CHECKING:
+    from app.models.match import CandidateMatch
+    from app.models.resume import Resume
 
 
 class Candidate(Base):
@@ -58,6 +63,25 @@ class Candidate(Base):
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow,
+        default=lambda: datetime.now(timezone.utc),
         nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        nullable=False,
+    )
+
+    resumes: Mapped[list["Resume"]] = relationship(
+        "Resume",
+        back_populates="candidate",
+        cascade="all, delete-orphan",
+    )
+
+    matches: Mapped[list["CandidateMatch"]] = relationship(
+        "CandidateMatch",
+        back_populates="candidate",
+        cascade="all, delete-orphan",
     )

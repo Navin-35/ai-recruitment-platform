@@ -1,7 +1,12 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, ForeignKey, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+
+if TYPE_CHECKING:
+    from app.models.job import Job
 
 
 class JobRequirement(Base):
@@ -32,4 +37,9 @@ class JobRequirement(Base):
     importance: Mapped[str | None] = mapped_column(
         String(50),
         nullable=True,
+    )
+
+    job: Mapped["Job"] = relationship(
+        "Job",
+        back_populates="requirements",
     )
