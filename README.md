@@ -183,17 +183,69 @@ ai-recruitment-platform/
 
 ---
 
-## 🗺️ Engineering Roadmap
+## 🚀 Quick Start Guide
+
+### 1. Prerequisites
+- Python 3.11+
+- Node.js 18+ and npm
+
+### 2. Backend Setup & Run
+```bash
+# Navigate to backend and activate virtualenv
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment variables (optional, fallback defaults work out-of-the-box)
+cp .env.example .env
+
+# Start FastAPI backend server (runs on http://localhost:8000)
+uvicorn app.main:app --reload --port 8000
+```
+
+### 3. Seed Demo Data & Execute AI Matching Pipeline
+```bash
+# In backend directory with venv active:
+python seed_demo_data.py
+```
+
+### 4. Frontend Setup & Run
+```bash
+# Navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start Vite React development server (runs on http://localhost:5173)
+npm run dev
+```
+
+### 5. Running Test Suite
+```bash
+# Run 42 full unit & integration tests from repository root:
+.\backend\.venv\Scripts\pytest backend/tests/ -v
+
+# Run End-to-End Pipeline Verification script:
+.\backend\.venv\Scripts\python backend/test_pipeline.py
+```
+
+---
+
+## 🗺️ Engineering Roadmap Status
 
 - [x] **Stage 1: Foundation** — SQLite/Postgres baseline database schema and basic FastAPI endpoints.
-- [ ] **Stage 2: Supabase & Vector Storage** — Supabase integration with pgvector, HNSW indexing, and storage buckets.
-- [ ] **Stage 3: Document Processing** — PyMuPDF / docx extraction with section detection and fallback OCR.
-- [ ] **Stage 4: Structured Intelligence** — Gemini structured extraction with Pydantic validation and Skill Graph normalization.
-- [ ] **Stage 5: Hybrid RAG & Reranking** — pgvector + FTS hybrid search, RRF, and cross-encoder reranking.
-- [ ] **Stage 6: Matching & Deterministic Scoring** — Requirement-level matching, weighted scoring engine, and skill-gap identification.
-- [ ] **Stage 7: Grounded Explanations** — Evidence citation generator mapping claims to page numbers and document sections.
-- [ ] **Stage 8: LangGraph & Async Workers** — LangGraph state machine orchestrating batch processing via Redis.
-- [ ] **Stage 9: Observability & Evals** — Langfuse tracing, retrieval recall metrics, and CI/CD automated test harness.
+- [x] **Stage 2: Supabase & Vector Storage** — Supabase integration with pgvector, HNSW indexing, and storage buckets.
+- [x] **Stage 3: Document Processing** — PyMuPDF / docx extraction with section detection and fallback OCR.
+- [x] **Stage 4: Structured Intelligence** — Gemini structured extraction with Pydantic validation and Skill Graph normalization.
+- [x] **Stage 5: Hybrid RAG & Reranking** — pgvector + FTS hybrid search, RRF, and cross-encoder reranking.
+- [x] **Stage 6: Matching & Deterministic Scoring** — Requirement-level matching, weighted scoring engine, and skill-gap identification.
+- [x] **Stage 7: Grounded Explanations** — Evidence citation generator mapping claims to page numbers and document sections.
+- [x] **Stage 8: LangGraph & Async Workers** — LangGraph state machine orchestrating batch processing via Redis.
+- [x] **Stage 9: Observability & Evals** — Langfuse tracing, retrieval recall metrics, and CI/CD automated test harness.
 
 ---
 
