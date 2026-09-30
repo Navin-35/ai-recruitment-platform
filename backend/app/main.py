@@ -60,6 +60,28 @@ async def root():
     }
 
 
+from pydantic import BaseModel
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.core.database import get_db
+
+class DirectMatchRequest(BaseModel):
+    job_id: int
+    candidate_id: int
+
+@app.post("/match", tags=["Matches"])
+def match_candidate_direct(req: DirectMatchRequest, db: Session = Depends(get_db)):
+    """Direct alias for candidate matching matching assignment specification."""
+    from app.workflows.matching_pipeline import matching_pipeline
+    return matching_pipeline.match_candidate_to_job(job_id=req.job_id, candidate_id=req.candidate_id, db=db)
+
+@app.get("/ranking", tags=["Matches"])
+def get_ranking_direct(job_id: int, db: Session = Depends(get_db)):
+    """Direct alias for candidate ranking leaderboard matching assignment specification."""
+    from app.api.matches import get_job_ranking
+    return get_job_ranking(job_id=job_id, db=db)
+
+
 @app.get("/health")
 async def health_check():
     return {
