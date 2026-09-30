@@ -205,3 +205,37 @@ def delete_resume(
     db.delete(resume)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post(
+    "/{resume_id}/process",
+    response_model=ResumeResponse,
+)
+def process_resume(
+    resume_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    Parses resume document (PDF or DOCX), extracts structured candidate profile
+    using LLM, detects sections, and indexes 768-dim embeddings in DocumentChunk.
+    """
+    from app.workflows.matching_pipeline import matching_pipeline
+
+    resume = db.query(Resume).filter(Resume.id == resume_id).first()
+    if resume is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Resume not found.",
+        )
+
+    try:
+        matching_pipeline.process_and_index_resume(resume_id=resume.id, db=db)
+        db.refresh(resume)
+        return resume
+    except Exception as e:
+        resume.processing_status = "failed"
+        db.commit()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to process resume: {str(e)}",
+        )

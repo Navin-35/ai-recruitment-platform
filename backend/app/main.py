@@ -55,7 +55,7 @@ app.include_router(matches_router)
 async def root():
     return {
         "message": "AI Recruitment Platform API is running",
-        "version": "0.1.0",
+        "version": "1.0.0",
         "status": "healthy",
     }
 
@@ -66,3 +66,35 @@ async def health_check():
         "status": "healthy",
         "service": "backend",
     }
+
+
+@app.get("/api/system/status")
+async def system_status():
+    from app.ai.embedding_client import embedding_client
+    from app.core.config import settings
+    from app.core.observability import tracer
+    return {
+        "status": "healthy",
+        "app_name": settings.app_name,
+        "version": settings.app_version,
+        "environment": settings.environment,
+        "embedding": embedding_client.get_status(),
+        "observability": {
+            "langfuse_enabled": tracer.is_enabled,
+        },
+        "background_queue": {
+            "redis_enabled": settings.enable_redis_queue,
+            "engine": "redis" if settings.enable_redis_queue else "in-memory-threadpool",
+        },
+        "auth_enforced": settings.enable_auth_enforcement,
+    }
+
+
+@app.get("/tasks/{task_id}")
+async def get_task_status(task_id: str):
+    from fastapi import HTTPException
+    from app.workflows.worker import async_worker
+    task = async_worker.get_task_status(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found.")
+    return task
