@@ -1,0 +1,28 @@
+Alex Rivera
+Email: alex.rivera@example.com
+Phone: (555) 345-6789
+
+Professional Summary:
+Motivated Junior Software Developer with 1 year of internship experience. Passionate about learning modern web technologies, Python scripting, and basic web development.
+
+Technical Skills:
+- Languages: Python, JavaScript, HTML, CSS
+- Web & Frameworks: Flask, React (Beginner), Express
+- Databases: SQLite
+- Tools: Git, VS Code
+
+Experience:
+Software Engineering Intern | StartUp Foundry (June 2023 - May 2024)
+- Assisted senior engineers in building simple CRUD API routes in Python with Flask.
+- Created responsive UI components using React and HTML/CSS.
+- Wrote basic unit tests and participated in daily standups and code reviews.
+
+Projects:
+Personal Portfolio Website:
+- Built a portfolio website with React and CSS animations.
+Expense Tracker:
+- Built a small Python and SQLite application to record personal monthly budgets.
+
+Education:
+Associate Degree in Information Technology
+City College, 2023

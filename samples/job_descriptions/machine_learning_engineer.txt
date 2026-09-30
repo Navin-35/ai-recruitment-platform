@@ -1,0 +1,23 @@
+Machine Learning Engineer
+Company: DeepMind Intelligence
+Location: Hybrid / San Francisco, CA
+
+About the Role:
+DeepMind Intelligence is hiring a Machine Learning Engineer to build production RAG systems, embedding pipelines, and LLM fine-tuning workflows for enterprise applications.
+
+Key Responsibilities:
+- Design and implement end-to-end Machine Learning pipelines using Python and PyTorch.
+- Develop retrieval-augmented generation (RAG) architectures with vector search and rerankers.
+- Deploy scalable model inference services using FastAPI and Docker.
+- Evaluate models using precision, recall, and groundedness metrics.
+
+Requirements:
+- Strong proficiency in Python for ML and data processing.
+- Experience with PyTorch or TensorFlow for deep learning.
+- Hands-on experience building vector retrieval or semantic search systems.
+- Production experience with Docker and FastAPI.
+
+Preferred:
+- Experience fine-tuning open-source LLMs (Llama, Mistral, Gemma).
+- Background with PostgreSQL and pgvector.
+- M.S. or B.S. in Computer Science or Artificial Intelligence.

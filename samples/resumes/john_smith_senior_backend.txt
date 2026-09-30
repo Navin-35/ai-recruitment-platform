@@ -1,0 +1,36 @@
+John Smith
+Email: john.smith@example.com
+Phone: (555) 234-5678
+LinkedIn: linkedin.com/in/johnsmith-backend
+
+Professional Summary:
+Senior Backend Engineer with 5+ years of experience designing and scaling distributed web services and asynchronous APIs. Proven track record in high-concurrency microservice design, database optimization, and cloud containerization.
+
+Technical Skills:
+- Languages: Python, SQL, Go, Bash
+- Frameworks & Libraries: FastAPI, Starlette, SQLAlchemy, Pydantic, Celery
+- Databases: PostgreSQL, Redis, MongoDB
+- DevOps & Cloud: Docker, Kubernetes, AWS (ECS, RDS, S3), Git, CI/CD
+
+Work Experience:
+Senior Backend Developer | Nexus Core Technologies (2022 - Present)
+- Architected and deployed 12 async FastAPI microservices handling over 25,000 requests per minute with sub-50ms p95 latency.
+- Refactored PostgreSQL data models and optimized indexing strategies, reducing query latency across 50M rows by 42%.
+- Built automated deployment pipelines using Docker and Kubernetes, ensuring seamless blue-green deployments.
+- Implemented multi-tier caching with Redis, reducing database load by 60%.
+
+Backend Software Engineer | Apex Data Labs (2019 - 2022)
+- Developed robust REST APIs in Python for automated data ingestion and analytics pipelines.
+- Integrated PostgreSQL schemas and handled database migrations using Alembic.
+- Containerized development and staging environments using Docker and Docker Compose.
+
+Projects:
+Distributed Task Dispatcher:
+- Built an asynchronous distributed job queue in Python and Redis handling retry policies, dead-letter queues, and worker health checks.
+
+Education:
+Bachelor of Science in Computer Science
+University of Washington, 2019
+
+Certifications:
+AWS Certified Solutions Architect – Associate

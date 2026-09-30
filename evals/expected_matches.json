@@ -1,0 +1,31 @@
+{
+  "test_cases": [
+    {
+      "job_title": "Senior Backend Engineer",
+      "required_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "Kubernetes"],
+      "candidate_evaluations": [
+        {
+          "candidate_name": "Devin Backend",
+          "expected_score_range": [80.0, 95.0],
+          "expected_matched_skills": ["Python", "FastAPI", "PostgreSQL", "Docker"],
+          "expected_missing_skills": ["Kubernetes"],
+          "relevance_ground_truth": {
+            "Python": 1.0,
+            "FastAPI": 1.0,
+            "PostgreSQL": 0.9,
+            "Docker": 0.85
+          }
+        },
+        {
+          "candidate_name": "Frontend Fiona",
+          "expected_score_range": [30.0, 60.0],
+          "expected_matched_skills": ["Docker"],
+          "expected_missing_skills": ["FastAPI", "Kubernetes", "PostgreSQL"],
+          "relevance_ground_truth": {
+            "Docker": 0.5
+          }
+        }
+      ]
+    }
+  ]
+}

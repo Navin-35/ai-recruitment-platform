@@ -1,0 +1,26 @@
+Senior Backend Engineer
+Company: CloudScale Systems
+Location: Remote
+
+About the Role:
+We are looking for a Senior Backend Engineer to design and scale our distributed AI microservices platform. You will lead backend architecture, build high-throughput RESTful and streaming APIs, and optimize database queries across millions of transactions.
+
+Key Responsibilities:
+- Design, build, and deploy production backend microservices using Python and FastAPI.
+- Architect and maintain relational data stores with PostgreSQL, optimizing complex SQL queries and indexing strategies.
+- Containerize services with Docker and orchestrate workloads using Kubernetes in cloud environments (AWS or GCP).
+- Implement low-latency caching and message queues using Redis.
+- Collaborate with frontend engineers, AI researchers, and DevOps to ensure 99.99% system availability and security.
+
+Requirements (Mandatory):
+- 4+ years of professional backend software engineering experience with Python.
+- Proven expertise in modern Python async frameworks (FastAPI or Starlette).
+- Strong relational database experience with PostgreSQL, schema migrations, and query tuning.
+- Hands-on experience containerizing applications using Docker.
+- Experience building and consuming REST APIs.
+
+Preferred Qualifications (Nice-to-Have):
+- Experience orchestrating microservices with Kubernetes.
+- Experience with in-memory caching solutions like Redis.
+- Familiarity with cloud platforms (AWS or GCP).
+- Experience working with vector databases or AI model inference pipelines.

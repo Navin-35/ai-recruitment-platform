@@ -1,0 +1,30 @@
+Elena Rostova
+Email: elena.rostova@example.com
+Phone: (555) 876-5432
+
+Professional Summary:
+Applied Machine Learning Engineer with 4 years of experience specializing in Deep Learning, PyTorch, RAG architectures, and scalable model serving. Experienced in deploying vector search indexes and fine-tuning transformer models for enterprise search and NLP.
+
+Technical Skills:
+- Languages: Python, C++, SQL
+- Deep Learning & ML: PyTorch, Hugging Face Transformers, LangChain, scikit-learn
+- Vector Search & Storage: pgvector, FAISS, PostgreSQL
+- Serving & Infra: FastAPI, Docker, ONNX Runtime, Git
+
+Work Experience:
+Machine Learning Engineer | SemanticAI Labs (2022 - Present)
+- Developed advanced RAG pipeline with hybrid dense-lexical retrieval, improving query relevance precision by 28%.
+- Implemented and deployed PyTorch transformer models using FastAPI and Docker, serving 5M daily embedding requests with under 15ms latency.
+- Indexed 20M document embeddings into PostgreSQL using pgvector with HNSW indexing.
+
+AI Research Engineer | Cortex Innovations (2020 - 2022)
+- Trained sequence-to-sequence neural networks in PyTorch for automated document categorization.
+- Created data preprocessing and text extraction pipelines in Python handling over 100,000 PDFs monthly.
+
+Projects:
+Neural Code Matcher:
+- Built a vector-based code similarity search engine utilizing PyTorch embeddings and FastAPI backend.
+
+Education:
+Master of Science in Artificial Intelligence
+Carnegie Mellon University, 2020
